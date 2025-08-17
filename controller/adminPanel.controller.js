@@ -1,4 +1,5 @@
 const Order = require("../models/Order");
+const Product = require("../models/Product");
 // for admin pannel
 //DONE
 const getAllOrders = async (req, res) => {
@@ -42,5 +43,13 @@ const getOrderByStatus = async (req, res) => {
     }
 }
 
+const getAdminAllProduct = async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.status(200).json(products);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
 
-module.exports = { getAllOrders, putUpdateOrderStatus, getOrderByStatus };
+module.exports = {getAdminAllProduct ,getAllOrders, putUpdateOrderStatus, getOrderByStatus };

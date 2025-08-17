@@ -3,13 +3,21 @@ const User = require("../models/User");
 //DONE VALIDATE USER
 const putUpdateUserProfile = async (req, res) => {
     try {
-        const userId = req.user._id;
-        const updates = req.body;
+        const userId = req.user.id;
+        const { name, address, pincode, mobile } = req.body;
 
-        const updatedUser = await User.findByIdAndUpdate(userId, updates, {
-            new: true,
-            runValidators: true
-        }).select("-password");
+        if (!name || !address || !pincode) {
+            return res.status(400).json({ error: "Name, address, and pincode are required." });
+        }
+
+        const updateFields = { name, address, pincode };
+        if (mobile?.trim()) updateFields.mobile = mobile;
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            updateFields,
+            { new: true, runValidators: true }
+        ).select("-password");
 
         if (!updatedUser) {
             return res.status(404).json({ message: "User not found" });
@@ -17,9 +25,13 @@ const putUpdateUserProfile = async (req, res) => {
 
         res.status(200).json(updatedUser);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error(err);
+        res.status(500).json({ error: err.message || "Server Error" });
     }
 };
+
+
+
 
 // DONE USER
 const deleteAnAccount = async (req, res) => {
@@ -77,5 +89,6 @@ const getAllUser = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
 
 module.exports = { putUpdateUserProfile, deleteAnAccount, getLoggedIn, getUserById, getAllUser };

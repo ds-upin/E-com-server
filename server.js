@@ -22,14 +22,25 @@ connectDB(MONGO_URI);
 
 const app = express();
 
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use("/uploads",express.static(path.join(__dirname,"uploads")))
+app.use('/uploads', express.static('uploads', {
+  setHeaders: (res, path) => {
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin'); 
+  }
+}));
+
+
+//app.use("/uploads",express.static(path.join(__dirname,"uploads")))
 
 app.use("/api/auth",authRouter);
-app.use("api/users",userRouter);
+app.use("/api/users",userRouter);
 app.use("/api/products",productRouter);
 app.use("/api/cart",cartRouter);
 app.use("/api/orders",orderRouter);

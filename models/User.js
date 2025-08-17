@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
     pincode:{
         type: Number,
     },
+    mobile: {
+        type: Number,
+        required: true,
+    },
     role: { 
         type: String,
         enum: ['user', 'admin'],

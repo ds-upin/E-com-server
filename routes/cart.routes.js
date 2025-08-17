@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const authMiddleware = require('../middleware/authMiddleware');
 
 const {
     getUserCart,
@@ -10,10 +11,10 @@ const {
 } = require("../controller/cart.controller");
 const { get } = require('mongoose');
 
-router.get("/",getUserCart);
-router.post("/",postAddItem);
-router.put("/",putItemQuantity);
-router.delete("/:productId",deleteItem);
-router.delete("/",deleteClearCart);
+router.get("/",authMiddleware,getUserCart);
+router.post("/",authMiddleware, postAddItem);
+router.put("/",authMiddleware, putItemQuantity);
+router.delete("/:productId",authMiddleware, deleteItem);
+router.delete("/",authMiddleware, deleteClearCart);
 
 module.exports = router;
