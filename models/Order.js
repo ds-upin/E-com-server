@@ -13,6 +13,10 @@ const orderSchema = new mongoose.Schema({
         quantity: {
             type: Number,
             default: 1,
+        },
+        price: {
+            type: Number,
+            required: true,
         }
     }],
     totalAmount: { 
@@ -27,6 +31,9 @@ const orderSchema = new mongoose.Schema({
         type: String, 
         required: true,
         trim: true,
+    },
+    pincode: {
+        type: Number,
     },
     paymentMethod: { 
         type: String 

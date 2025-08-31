@@ -5,7 +5,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const {
     getUserCart,
     postAddItem,
-    putItemQuantity,
+    patchItemQuantity,
     deleteItem,
     deleteClearCart,
 } = require("../controller/cart.controller");
@@ -13,7 +13,7 @@ const { get } = require('mongoose');
 
 router.get("/",authMiddleware,getUserCart);
 router.post("/",authMiddleware, postAddItem);
-router.put("/",authMiddleware, putItemQuantity);
+router.patch("/",authMiddleware, patchItemQuantity);
 router.delete("/:productId",authMiddleware, deleteItem);
 router.delete("/",authMiddleware, deleteClearCart);
 

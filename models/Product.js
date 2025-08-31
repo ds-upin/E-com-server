@@ -36,7 +36,7 @@ const productSchema = new mongoose.Schema({
     }],
     rating: {
         type: Number,
-        default: true,
+        //default: true,
     },},
     { timestamps: true,
 });
