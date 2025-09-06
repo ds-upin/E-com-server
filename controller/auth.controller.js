@@ -1,10 +1,14 @@
 require("dotenv").config();
 const User = require("../models/User");
+const UnverifiedUser = require("../models/UnverifiedUser");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+
+
+const verifySendEmail = require("../services/verifySendEmail");
 
 
 const postLogin = async (req, res) => {
@@ -46,7 +50,6 @@ const postLogin = async (req, res) => {
             sameSite: "Lax",
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
-
         res.status(200).json({
             message: "Login successful",
             user: {
@@ -68,21 +71,28 @@ const postLogin = async (req, res) => {
 // DONE
 // VERIFIED
 const postRegister = async (req, res) => {
-    const { name, email, password, address, pincode, mobile, role } = req.body;
+    const { name, email, password, address, pincode, mobile, role = "user" } = req.body;
 
     try {
         if (!mobile || !name || !email || !password || !address) {
             return res.status(400).json({ message: "All required fields must be provided" });
         }
+
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(409).json({ message: "User with this email already exists" });
         }
 
+        const existingUnverified = await UnverifiedUser.findOne({ email });
+        if (existingUnverified) {
+            await UnverifiedUser.deleteOne({ email });
+        }
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
+        const verificationCode = Math.floor(100000 + Math.random() * 900000);
 
-        const newUser = new User({
+        const newUser = new UnverifiedUser({
             name,
             email,
             password: hashedPassword,
@@ -90,11 +100,14 @@ const postRegister = async (req, res) => {
             pincode,
             role,
             mobile,
+            verificationCode,
         });
 
+        await verifySendEmail(email, name, verificationCode);
         await newUser.save();
+
         res.status(201).json({
-            message: "Registration successful",
+            message: "Verify Email",
             user: {
                 id: newUser._id,
                 name: newUser.name,
@@ -108,6 +121,48 @@ const postRegister = async (req, res) => {
         res.status(500).json({ message: "Server error during registration" });
     }
 };
+
+
+const postVerifyUserEmail = async (req, res) => {
+    const { email, code } = req.body;
+
+    try {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ mess: "Already registered with given email" });
+        }
+
+        const unverified = await UnverifiedUser.findOne({ email });
+        if (!unverified) {
+            return res.status(400).json({ mess: "Sign up again" });
+        }
+
+        if (Number(code) !== unverified.verificationCode) {
+            return res.status(400).json({ mess: "Wrong verification code" });
+        }
+
+        // Create user in the main User collection
+        await User.create({
+            name: unverified.name,
+            email: unverified.email,
+            password: unverified.password,
+            address: unverified.address,
+            pincode: unverified.pincode,
+            role: unverified.role,
+            mobile: unverified.mobile,
+        });
+
+        // Clean up unverified user
+        await UnverifiedUser.deleteOne({ email });
+
+        return res.status(200).json({ mess: "Signup Successful" });
+
+    } catch (error) {
+        console.error("Error in verification:", error);
+        return res.status(500).json({ mess: "Server error, try again later" });
+    }
+};
+
 
 const postLogout = (req, res) => {
     res.clearCookie("token", {
@@ -144,4 +199,4 @@ const getUserdata = (req, res) => {
     }
 };
 
-module.exports = { postLogin, postRegister, postLogout, postRefreshToken, postResetPassword, postForgotPassword, getUserdata };
+module.exports = { postLogin, postRegister, postLogout, postRefreshToken, postResetPassword, postForgotPassword, getUserdata, postVerifyUserEmail };

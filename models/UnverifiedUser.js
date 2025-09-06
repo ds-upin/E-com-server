@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const unverifiedUserSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -28,12 +28,23 @@ const userSchema = new mongoose.Schema({
     mobile: {
         type: Number,
         required: true,
+        unique: true,
     },
     role: {
         type: String,
         enum: ['user', 'admin'],
         default: 'user'
     },
-}, { timestamps: true });
+    verificationCode: {
+        type: Number,
+        required: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        expires: 600,
+    }
+});
 
-module.exports = mongoose.model('User', userSchema);
+const UnverifiedUser = mongoose.model('UnverifiedUser', unverifiedUserSchema);
+module.exports = UnverifiedUser;
