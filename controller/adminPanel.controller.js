@@ -4,7 +4,7 @@ const Product = require("../models/Product");
 //DONE
 const getAllOrders = async (req, res) => {
     try {
-        const orders = await Order.find({status:"pending"}).populate("user","name _id pincode");
+        const orders = await Order.find({ status: "pending" }).populate("user", "name _id pincode");
         res.status(200).json(orders);
     } catch (error) {
         res.status(500).json({ message: "Error fetching orders", error });
@@ -15,7 +15,7 @@ const getAllOrders = async (req, res) => {
 const patchUpdateOrderStatus = async (req, res) => {
     const { id } = req.params;
     //console.log(req.body);
-    const {status} = req.body;
+    const { status } = req.body;
     //console.log(status);
 
     try {
@@ -27,7 +27,7 @@ const patchUpdateOrderStatus = async (req, res) => {
         if (!order) {
             return res.status(404).json({ message: "Order not found" });
         }
-        res.status(200).json({order});
+        res.status(200).json({ order });
     } catch (error) {
         res.status(500).json({ message: "Error updating order", error });
     }
@@ -35,15 +35,15 @@ const patchUpdateOrderStatus = async (req, res) => {
 
 //DONE
 const getOrderByStatus = async (req, res) => {
-    const {status} = req.params;
+    const { status } = req.params;
     //console.log("Status",status);
-    try{
-        const orders = await Order.find({status}).populate("user","name _id pincode");
+    try {
+        const orders = await Order.find({ status }).populate("user", "name _id pincode");
         //console.log(orders);
         res.status(200).json(orders);
     }
-    catch(error){
-        res.status(500).json({"error":"Error in fetching the data"});
+    catch (error) {
+        res.status(500).json({ "error": "Error in fetching the data" });
     }
 }
 
@@ -56,4 +56,4 @@ const getAdminAllProduct = async (req, res) => {
     }
 };
 
-module.exports = {getAdminAllProduct ,getAllOrders, patchUpdateOrderStatus, getOrderByStatus };
+module.exports = { getAdminAllProduct, getAllOrders, patchUpdateOrderStatus, getOrderByStatus };

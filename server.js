@@ -10,7 +10,7 @@ const connectDB = require("./connections");
 const cartRouter = require("./routes/cart.routes");
 const adminRouter = require("./routes/admin-panel.routes");
 const authRouter = require("./routes/auth.routes");
-const orderRouter  = require("./routes/order.routes");
+const orderRouter = require("./routes/order.routes");
 const productRouter = require("./routes/product.routes");
 const userRouter = require("./routes/user.routes");
 
@@ -23,30 +23,30 @@ connectDB(MONGO_URI);
 const app = express();
 
 app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true
+    origin: "http://localhost:5173",
+    credentials: true
 }));
 app.use(helmet());
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use('/uploads', express.static('uploads', {
-  setHeaders: (res, path) => {
-    res.set('Cross-Origin-Resource-Policy', 'cross-origin'); 
-  }
+    setHeaders: (res, path) => {
+        res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+    }
 }));
 
 
 //app.use("/uploads",express.static(path.join(__dirname,"uploads")))
 
-app.use("/api/auth",authRouter);
-app.use("/api/users",userRouter);
-app.use("/api/products",productRouter);
-app.use("/api/cart",cartRouter);
-app.use("/api/orders",orderRouter);
-app.use('/api/admin-panel',adminRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
+app.use("/api/cart", cartRouter);
+app.use("/api/orders", orderRouter);
+app.use('/api/admin-panel', adminRouter);
 
-app.listen(PORT,(err)=>{ 
-    if(err) console.log("Error in server setup");
-    console.log(APP_NAME," [Server listening on port:",PORT,"]");
+app.listen(PORT, (err) => {
+    if (err) console.log("Error in server setup");
+    console.log(APP_NAME, " [Server listening on port:", PORT, "]");
 });

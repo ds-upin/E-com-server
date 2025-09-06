@@ -9,9 +9,9 @@ const {
     putCancelOrder,
 } = require("../controller/order.controller");
 
-router.post("/",authMiddleware,postPlaceOrder);
-router.get("/",authMiddleware,getUserOrder);
-router.get("/:id",getSpecificOrder);
-router.put("/:id",authMiddleware,putCancelOrder);
+router.post("/", authMiddleware, postPlaceOrder);
+router.get("/", authMiddleware, getUserOrder);
+router.get("/:id", getSpecificOrder);
+router.put("/:id", authMiddleware, putCancelOrder);
 
 module.exports = router;

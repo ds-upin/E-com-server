@@ -37,8 +37,10 @@ const productSchema = new mongoose.Schema({
     rating: {
         type: Number,
         //default: true,
-    },},
-    { timestamps: true,
-});
+    },
+},
+    {
+        timestamps: true,
+    });
 
-module.exports = mongoose.model('Product',productSchema);
+module.exports = mongoose.model('Product', productSchema);

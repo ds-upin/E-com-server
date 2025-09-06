@@ -11,10 +11,10 @@ const {
 } = require("../controller/cart.controller");
 const { get } = require('mongoose');
 
-router.get("/",authMiddleware,getUserCart);
-router.post("/",authMiddleware, postAddItem);
-router.patch("/",authMiddleware, patchItemQuantity);
-router.delete("/:productId",authMiddleware, deleteItem);
-router.delete("/",authMiddleware, deleteClearCart);
+router.get("/", authMiddleware, getUserCart);
+router.post("/", authMiddleware, postAddItem);
+router.patch("/", authMiddleware, patchItemQuantity);
+router.delete("/:productId", authMiddleware, deleteItem);
+router.delete("/", authMiddleware, deleteClearCart);
 
 module.exports = router;

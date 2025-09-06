@@ -33,10 +33,11 @@ const getProductDetails = async (req, res) => {
 // DONE
 const postCreateProduct = async (req, res) => {
     try {
-        const {name, slug, description, costPrice, sellingPrice, category, stock } = req.body;
+        const { name, slug, description, costPrice, sellingPrice, category, stock } = req.body;
         const imageFile = req.file;
 
-        const newProduct = new Product({name, slug, description, costPrice, sellingPrice, category, stock,
+        const newProduct = new Product({
+            name, slug, description, costPrice, sellingPrice, category, stock,
             image: imageFile ? [{ url: `${req.protocol}://${req.get('host')}/uploads/${imageFile.filename}` }] : []
         });
 
@@ -51,7 +52,7 @@ const postCreateProduct = async (req, res) => {
 // DONE
 const putUpdateProduct = async (req, res) => {
     try {
-        
+
         const product = await Product.findById(req.params.id);
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
@@ -81,7 +82,7 @@ const deleteProduct = async (req, res) => {
         // Delete image file from filesystem
         if (product.image && product.image.length > 0) {
             product.image.forEach((img) => {
-                const imagePath = path.join(__dirname, "..", img.url.replace(`${req.protocol}://${req.get("host")}`,"."));
+                const imagePath = path.join(__dirname, "..", img.url.replace(`${req.protocol}://${req.get("host")}`, "."));
                 fs.unlink(imagePath, (err) => {
                     if (err) {
                         console.error("Failed to delete image:", err.message);
@@ -98,4 +99,4 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-module.exports = {getAllProduct, getProductDetails, postCreateProduct, putUpdateProduct, deleteProduct};
+module.exports = { getAllProduct, getProductDetails, postCreateProduct, putUpdateProduct, deleteProduct };

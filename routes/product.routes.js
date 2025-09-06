@@ -11,10 +11,10 @@ const {
     deleteProduct,
 } = require("../controller/product.controller");
 
-router.get("/",getAllProduct);
-router.get("/:id",getProductDetails);
-router.post("/",authAdmin,upload.single("image"),postCreateProduct);
-router.put("/:id",authAdmin,putUpdateProduct);
-router.delete("/:id",authAdmin,deleteProduct);
+router.get("/", getAllProduct);
+router.get("/:id", getProductDetails);
+router.post("/", authAdmin, upload.single("image"), postCreateProduct);
+router.put("/:id", authAdmin, putUpdateProduct);
+router.delete("/:id", authAdmin, deleteProduct);
 
 module.exports = router;

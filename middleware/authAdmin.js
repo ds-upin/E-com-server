@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const authAdmin = (req, res, next) => {
     try {
-        const token = req.cookies.token; 
+        const token = req.cookies.token;
         //console.log("auth token",token);
         if (!token) {
             return res.status(401).json({ error: 'Unauthorized1: No token provided' });
@@ -13,8 +13,8 @@ const authAdmin = (req, res, next) => {
         //console.log(decoded,"--");
         //console.log(process.env.ADMIN_PIN,"--");
         //console.log(process.env.ADMIN_EMAIL,"--");
-        if(decoded.email==process.env.ADMIN_EMAIL && decoded.pincode==process.env.ADMIN_PIN){
-            req.user = decoded; 
+        if (decoded.email == process.env.ADMIN_EMAIL && decoded.pincode == process.env.ADMIN_PIN) {
+            req.user = decoded;
             //console.log(decoded);
             return next();
         }

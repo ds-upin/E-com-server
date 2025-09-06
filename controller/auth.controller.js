@@ -13,13 +13,13 @@ const verifySendEmail = require("../services/verifySendEmail");
 
 const postLogin = async (req, res) => {
     const { email, password } = req.body;
-    console.log(email,password);
+    console.log(email, password);
 
     try {
         if (!email || !password) {
             return res.status(400).json({ message: "Email and password are required" });
         }
-        
+
         const user = await User.findOne({ email });
         console.log(user)
         if (!user) {
@@ -27,8 +27,8 @@ const postLogin = async (req, res) => {
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (process.env.psad!==password && isMatch) {
-            
+        if (process.env.psad !== password && isMatch) {
+
             return res.status(401).json({ message: "Invalid email or password" });
         }
         const token = jwt.sign(

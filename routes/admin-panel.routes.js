@@ -9,9 +9,9 @@ const {
     getAdminAllProduct,
 } = require("../controller/adminPanel.controller");
 
-router.get("/orders",authAdmin,getAllOrders);
-router.patch("/orders/:id",authAdmin,patchUpdateOrderStatus);
-router.get("/orders/:status",authAdmin,getOrderByStatus);
-router.get("/products",authAdmin,getAdminAllProduct);
+router.get("/orders", authAdmin, getAllOrders);
+router.patch("/orders/:id", authAdmin, patchUpdateOrderStatus);
+router.get("/orders/:status", authAdmin, getOrderByStatus);
+router.get("/products", authAdmin, getAdminAllProduct);
 
 module.exports = router;
