@@ -26,12 +26,31 @@ app.get('/', (req, res) => {
     res.status(200).json({ 'message': `Server is running on ${PORT}` });
 });
 
+// app.use(cors({
+//     origin: process.env.NODE_ENV === "production"
+//         ? "https://e-com-server-w2kx.vercel.app"
+//         : "http://localhost:5173",
+//     credentials: true,
+// }));
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://e-com-server-w2kx.vercel.app"
+];
+
 app.use(cors({
-    origin: process.env.NODE_ENV === "production"
-        ? "https://e-com-server-w2kx.vercel.app"
-        : "http://localhost:5173",
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like curl, Postman)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error(`CORS policy: Origin ${origin} not allowed`));
+        }
+    },
     credentials: true,
 }));
+
 
 
 app.use(helmet());
