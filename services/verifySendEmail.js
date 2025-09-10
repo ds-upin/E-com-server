@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const verifySendEmail = async (to, name, code) => {
-    let testAccount = await nodemailer.createTestAccount();
+    //let testAccount = await nodemailer.createTestAccount();
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,

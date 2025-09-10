@@ -22,8 +22,12 @@ connectDB(MONGO_URI);
 
 const app = express();
 
+app.get('/',(req,res)=>{
+    res.status(200).json({'message':`Server is running on ${PORT}`});
+});
+
 app.use(cors({
-    origin: "https://e-com-front-sage.vercel.app",
+    origin: "http://localhost:5173",
     credentials: true
 }));
 
