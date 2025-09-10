@@ -26,6 +26,11 @@ app.use(cors({
     origin: "https://e-com-front-sage.vercel.app",
     credentials: true
 }));
+app.options('*', cors({
+  origin: "https://e-com-front-sage.vercel.app",
+  credentials: true
+}));
+
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
