@@ -23,7 +23,7 @@ connectDB(MONGO_URI);
 const app = express();
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://e-com-front-sage.vercel.app",
     credentials: true
 }));
 app.use(helmet());
