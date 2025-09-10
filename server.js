@@ -31,7 +31,7 @@ app.use(cors({
 //   credentials: true
 // }));
 
-//app.use(helmet());
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -51,7 +51,7 @@ app.use("/api/cart", cartRouter);
 app.use("/api/orders", orderRouter);
 app.use('/api/admin-panel', adminRouter);
 
-app.listen(PORT, (err) => {
-    if (err) console.log("Error in server setup");
-    console.log(APP_NAME, " [Server listening on port:", PORT, "]");
-});
+// app.listen(PORT, (err) => {
+//     if (err) console.log("Error in server setup");
+//     console.log(APP_NAME, " [Server listening on port:", PORT, "]");
+// });
