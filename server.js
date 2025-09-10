@@ -22,13 +22,15 @@ connectDB(MONGO_URI);
 
 const app = express();
 
-app.get('/',(req,res)=>{
-    res.status(200).json({'message':`Server is running on ${PORT}`});
+app.get('/', (req, res) => {
+    res.status(200).json({ 'message': `Server is running on ${PORT}` });
 });
 
 app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true
+    origin: process.env.NODE_ENV === "production"
+        ? "https://frontend-url.vercel.app"
+        : "http://localhost:5173",
+    credentials: true,
 }));
 
 
@@ -52,7 +54,10 @@ app.use("/api/cart", cartRouter);
 app.use("/api/orders", orderRouter);
 app.use('/api/admin-panel', adminRouter);
 
-app.listen(PORT, (err) => {
-    if (err) console.log("Error in server setup");
-    console.log(APP_NAME, " [Server listening on port:", PORT, "]");
-});
+if (process.env.NODE_ENV !== "production") {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
+
+module.exports = app;
