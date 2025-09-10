@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 
 app.use(cors({
     origin: process.env.NODE_ENV === "production"
-        ? "https://frontend-url.vercel.app"
+        ? "https://e-com-server-w2kx.vercel.app"
         : "http://localhost:5173",
     credentials: true,
 }));
