@@ -18,10 +18,10 @@ const authAdmin = (req, res, next) => {
             //console.log(decoded);
             return next();
         }
-        return res.status(401).json({ error: 'Unauthorized2: No token provided' });
+        return res.status(402).json({ error: 'Unauthorized2: No token provided' });
     } catch (err) {
         console.error('Auth error:', err);
-        return res.status(401).json({ error: 'Unauthorized3: Invalid or expired token' });
+        return res.status(403).json({ error: 'Unauthorized3: Invalid or expired token' });
     }
 };
 
