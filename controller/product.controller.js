@@ -1,6 +1,7 @@
 const Product = require("../models/Product");
 const path = require("path");
 const fs = require("fs");
+const cloudinary = require("../cloudinary");
 
 // Add lazy loading
 // @desc Get all the product
@@ -31,22 +32,59 @@ const getProductDetails = async (req, res) => {
 
 //ADMIN
 // DONE
+
 const postCreateProduct = async (req, res) => {
     try {
-        const { name, slug, description, costPrice, sellingPrice, category, stock } = req.body;
-        const imageFile = req.file;
+        const {
+            name,
+            slug,
+            description,
+            costPrice,
+            sellingPrice,
+            category,
+            stock,
+        } = req.body;
+
+        let imageUrl = null;
+
+        if (req.file) {
+            const uploadResult = await new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    {
+                        folder: "products",
+                        resource_type: "image",
+                    },
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result);
+                    }
+                );
+
+                stream.end(req.file.buffer);
+            });
+
+            imageUrl = uploadResult.secure_url;
+        }
 
         const newProduct = new Product({
-            name, slug, description, costPrice, sellingPrice, category, stock,
-            image: imageFile ? [{ url: `${req.protocol}://${req.get('host')}/uploads/${imageFile.filename}` }] : []
+            name,
+            slug,
+            description,
+            costPrice,
+            sellingPrice,
+            category,
+            stock,
+            image: imageUrl ? [{ url: imageUrl }] : [],
         });
 
         const savedProduct = await newProduct.save();
         res.status(201).json(savedProduct);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        console.error("Product creation failed:", err);
+        res.status(500).json({ error: "Failed to create product" });
     }
 };
+
 
 // ADMIN
 // DONE
