@@ -23,7 +23,7 @@ connectDB(MONGO_URI);
 const app = express();
 
 app.get('/', (req, res) => {
-    res.status(200).json({ 'message': `Server is running on ${PORT}` });
+    res.status(200).json({ 'message': `Server is running on ${process.env.NODE_ENV=="production"?process.env.NODE_ENV:PORT}` });
 });
 
 // app.use(cors({
@@ -63,7 +63,6 @@ app.use('/uploads', express.static('uploads', {
 }));
 
 
-//app.use("/uploads",express.static(path.join(__dirname,"uploads")))
 
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
